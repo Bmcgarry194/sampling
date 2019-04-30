@@ -1,13 +1,46 @@
 
 # Markov Chain Monte Carlo or How I Learned to Stop Worrying and Love the Sampler
 
+## Road Map
+
+### Why do I care?
+
+### Overview of Metropolis-Hastings Algorithm
+* Earliest and simplest sampling algorithm 
+
+### What is likelihood?
+* Step rejection or acceptance
+
+### MH Algorithm in Action: Can we recover parameters of an unkown distribution?
+* Create Fake Data
+* Sample Using MH
+* Did we find a good estimate of our parameters from our data?
+
+### Pathological Sampling: What can go wrong?
+* Convergence
+* Burn in time
+* Step size
+
+### Futher Reading
+
 ## Why Sample?
 * MCMC is used to solve high dimensional optimisation and integration problems
 * In bayesian statistics it is more often the case that the integration problems are not analytically tractable
 * Full distribution for parameters rather than just point estimates
 * Compatibility intervals
 
-## Metropolis-Hastings Algorithm 
+### Sampling allows us to find the parameters which are most likely to have produced our data
+Wait, how is this different than something like gradient descent, we can get get parameter estimates from that process too?
+
+Gradient descent gives point estimates of our parameters while sampling gives us a distribution of possible values of our parameters. 
+
+Sampling helps us answer the additional question of how certain we are about our parameter estimates.
+
+## Animated Example of M-H Random Walk
+
+https://chi-feng.github.io/mcmc-demo/app.html#RandomWalkMH,banana
+
+## Metropolis-Hastings Algorithm
 
 1. Have data (D) and parameters (theta) we want to estimate (In our case the parameters would be mu and sigma)
 2. Sample around the parameter space using a markov chain
@@ -20,10 +53,6 @@
 3. Repeat
 
 After a burn in period where the markov chain starts in an area of low likelihood, the chain will sample from areas with high likelihood proportionally more than lower likelihood areas. So, we can take all the accepted samples and plot them on a histogram and see which values have been sampled the most. This gives us the values of our distribution in question.
-
-## Animated Example of M-H Random Walk
-
-https://chi-feng.github.io/mcmc-demo/app.html#RandomWalkMH,banana
 
 
 ```python
@@ -68,7 +97,7 @@ ax.plot(x, y_2);
 ```
 
 
-![png](output_6_0.png)
+![png](output_7_0.png)
 
 
 ### Which distribution do you think is more likely to have generated the given data points, Orange or Blue?
@@ -151,7 +180,6 @@ Challenge: Can we recover the parameters of the distribution we generated our fa
 
 ```python
 #scale = standard deviation (sigma) and loc = mean (mu)
-
 distribution_shape = np.random.normal(loc=1, scale=0.5, size=10000)
 
 fig, ax = plt.subplots()
@@ -160,7 +188,7 @@ ax.hist(distribution_shape, bins=50);
 ```
 
 
-![png](output_14_0.png)
+![png](output_15_0.png)
 
 
 ## Draw samples from Ground Truth Distribution
@@ -236,7 +264,7 @@ plt.tight_layout();
 ```
 
 
-![png](output_22_0.png)
+![png](output_23_0.png)
 
 
 ## Feel the Burn
@@ -268,7 +296,7 @@ plt.tight_layout();
 ```
 
 
-![png](output_24_0.png)
+![png](output_25_0.png)
 
 
 
@@ -278,7 +306,7 @@ with sns.axes_style('white'):
 ```
 
 
-![png](output_25_0.png)
+![png](output_26_0.png)
 
 
 ## Fun with StepSize: Giant Steps
@@ -328,7 +356,7 @@ plt.tight_layout();
 ```
 
 
-![png](output_28_0.png)
+![png](output_29_0.png)
 
 
 What happened here?
@@ -361,7 +389,7 @@ plt.tight_layout();
 ```
 
 
-![png](output_30_0.png)
+![png](output_31_0.png)
 
 
 As we can see here there are much fewer new samples accepted. With a large step size we quickly move from the initialized values to the area of high likelihood but once there we are simply stuck rejecting almost every step because we can propose such a wide range of values and most every other step will be worse compared with the area of high likelihood. 
@@ -370,8 +398,17 @@ We get a quick approximation of the maximum value but when we look at the histog
 
 Smaller steps would give us the fine grain detail we are after
 
-## Review
+## Other Sampling Algorithms 
 
+* Gibbs Sampling
+* Hamiltonian Monte Carlo
+* NUTS
+
+## Packages that Will do all the Sampling for you
+* PyMC3
+* Pyro
+* Stan
+* BUGS
 
 # Sources
 
